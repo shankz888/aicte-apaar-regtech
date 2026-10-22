@@ -1,0 +1,697 @@
+"use client";
+
+import React, { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import {
+  Download,
+  Search,
+  Filter,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  X,
+  ArrowLeft,
+  FileCode,
+  ShieldAlert,
+  GraduationCap,
+  RefreshCw,
+} from "lucide-react";
+import { AppHeader } from "@/components/layout/app-header";
+import { StatusBadge } from "@/components/ui/status-badge";
+
+interface ViolationItem {
+  rule_code: string;
+  severity: "blocking" | "warning" | "info";
+  status: "accepted" | "flagged" | "rejected";
+  rule_description: string;
+  evidence_payload: Record<string, unknown>;
+  remediation_hint: string;
+}
+
+interface BatchLineItem {
+  row_index: number;
+  apaar_id: string | null;
+  full_name: string;
+  gender: string;
+  programme_code: string;
+  academic_year: string;
+  admission_category: string;
+  start_date: string;
+  end_date: string | null;
+  status: "accepted" | "flagged" | "rejected";
+  violations: ViolationItem[];
+}
+
+interface BatchData {
+  id: string;
+  institution_id: string;
+  original_filename: string;
+  total_rows: number;
+  accepted_rows: number;
+  flagged_rows: number;
+  rejected_rows: number;
+  status: string;
+  created_at: string | null;
+  items: BatchLineItem[];
+}
+
+type FilterOutcome = "all" | "rejected" | "flagged" | "accepted";
+
+export default function BatchRemediationConsolePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const routeParams = useParams();
+  const batchId = params?.id || (routeParams?.id as string) || "";
+
+  const [batch, setBatch] = useState<BatchData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [outcomeFilter, setOutcomeFilter] = useState<FilterOutcome>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRow, setSelectedRow] = useState<BatchLineItem | null>(null);
+  const [downloadingCsv, setDownloadingCsv] = useState(false);
+
+  useEffect(() => {
+    async function fetchBatchDetails() {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/batches/${batchId}`);
+        if (!res.ok) {
+          throw new Error(`Failed to load batch: HTTP ${res.status}`);
+        }
+        const data: BatchData = await res.json();
+        setBatch(data);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Error loading batch data.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBatchDetails();
+  }, [batchId]);
+
+  // Handle escape key to close drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedRow(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleDownloadAnnotatedCsv = async () => {
+    try {
+      setDownloadingCsv(true);
+      const res = await fetch(`/api/batches/${batchId}/annotated-csv`);
+      if (!res.ok) {
+        throw new Error("Failed to generate annotated CSV remediation file.");
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `annotated_${batch?.original_filename || "batch.csv"}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Download failed.");
+    } finally {
+      setDownloadingCsv(false);
+    }
+  };
+
+  const filteredItems = useMemo(() => {
+    if (!batch?.items) return [];
+
+    return batch.items.filter((item) => {
+      // Outcome filter
+      if (outcomeFilter !== "all" && item.status !== outcomeFilter) {
+        return false;
+      }
+
+      // Search query (Student Name, APAAR ID, Programme, Rule Code)
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        const matchesName = item.full_name.toLowerCase().includes(query);
+        const matchesApaar = item.apaar_id?.toLowerCase().includes(query) || false;
+        const matchesProg = item.programme_code.toLowerCase().includes(query);
+        const matchesRule = item.violations.some((v) =>
+          v.rule_code.toLowerCase().includes(query)
+        );
+        return matchesName || matchesApaar || matchesProg || matchesRule;
+      }
+
+      return true;
+    });
+  }, [batch?.items, outcomeFilter, searchQuery]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <AppHeader />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <RefreshCw className="w-8 h-8 animate-spin text-[#1D4ED8] mx-auto mb-4" />
+          <h2 className="text-sm font-semibold text-[#0F172A]">
+            Retrieving Batch Verification Results...
+          </h2>
+          <p className="text-xs text-slate-500 mt-1 font-mono">
+            Batch Reference ID: {batchId}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !batch) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <AppHeader />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="max-w-lg mx-auto bg-white border border-[#FECACA] rounded p-6 shadow-sm text-center">
+            <XCircle className="w-10 h-10 text-[#B91C1C] mx-auto mb-3" />
+            <h2 className="text-base font-bold text-[#0F172A] mb-1">
+              Unable to Retrieve Batch Record
+            </h2>
+            <p className="text-xs text-slate-600 mb-6">{error || "Batch not found."}</p>
+            <Link
+              href="/institution/submit"
+              className="inline-flex items-center text-xs font-semibold text-white bg-[#1D4ED8] hover:bg-[#1E40AF] px-4 py-2 rounded shadow-sm"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1.5" />
+              Return to Submission Workspace
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F8FAFC]">
+      <AppHeader />
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Navigation Breadcrumb & Title */}
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center space-x-2 text-xs font-mono uppercase text-slate-500 mb-1">
+              <Link href="/institution/submit" className="hover:text-slate-800 transition-colors">
+                SUBMISSION WORKSPACE
+              </Link>
+              <span>/</span>
+              <span className="text-slate-800 font-semibold">BATCH RESULTS #{batch.id.slice(0, 8)}</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
+                Batch Review & Line-Item Remediation Console
+              </h1>
+              <StatusBadge status={batch.status} size="sm" />
+            </div>
+            <div className="text-xs text-slate-500 mt-1 font-mono flex items-center space-x-3">
+              <span>File: {batch.original_filename}</span>
+              <span>•</span>
+              <span>Submitted: {batch.created_at ? new Date(batch.created_at).toLocaleString() : "Just now"}</span>
+            </div>
+          </div>
+
+          {/* Primary Action: Download Annotated Error CSV */}
+          <div className="flex items-center space-x-3">
+            <Link
+              href="/institution/submit"
+              className="inline-flex items-center text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-[#E2E8F0] px-3.5 py-2 rounded transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 mr-1.5" />
+              Upload New Batch
+            </Link>
+
+            <button
+              onClick={handleDownloadAnnotatedCsv}
+              disabled={downloadingCsv}
+              className="inline-flex items-center text-xs font-bold text-white bg-[#1D4ED8] hover:bg-[#1E40AF] px-4 py-2 rounded shadow-sm transition-colors disabled:opacity-50"
+            >
+              {downloadingCsv ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Generating Manifest...
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Annotated Correction CSV
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Top 4 KPI Summary Strip */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {/* Card 1: Total Submitted */}
+          <div className="bg-white border border-[#E2E8F0] rounded p-4 shadow-sm">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+              Total Submitted
+            </div>
+            <div className="text-2xl font-extrabold text-[#0F172A] font-mono">
+              {batch.total_rows.toLocaleString()}
+            </div>
+            <div className="text-[11px] text-slate-500 mt-1">
+              Enrolment records ingested
+            </div>
+          </div>
+
+          {/* Card 2: Accepted (Green) */}
+          <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded p-4 shadow-sm">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#15803D] font-semibold mb-1 flex items-center justify-between">
+              <span>Accepted Enrolments</span>
+              <CheckCircle2 className="w-4 h-4 text-[#15803D]" />
+            </div>
+            <div className="text-2xl font-extrabold text-[#15803D] font-mono">
+              {batch.accepted_rows.toLocaleString()}
+            </div>
+            <div className="text-[11px] text-[#15803D] mt-1 font-medium">
+              Promoted to central register
+            </div>
+          </div>
+
+          {/* Card 3: Flagged Warnings (Amber) */}
+          <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded p-4 shadow-sm">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#B45309] font-semibold mb-1 flex items-center justify-between">
+              <span>Flagged Warnings</span>
+              <AlertTriangle className="w-4 h-4 text-[#B45309]" />
+            </div>
+            <div className="text-2xl font-extrabold text-[#B45309] font-mono">
+              {batch.flagged_rows.toLocaleString()}
+            </div>
+            <div className="text-[11px] text-[#B45309] mt-1 font-medium">
+              Voluntary APAAR missing / non-fatal
+            </div>
+          </div>
+
+          {/* Card 4: Rejected / Blocking (Red) */}
+          <div className="bg-[#FEF2F2] border border-[#FECACA] rounded p-4 shadow-sm">
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#B91C1C] font-semibold mb-1 flex items-center justify-between">
+              <span>Rejected / Blocking</span>
+              <XCircle className="w-4 h-4 text-[#B91C1C]" />
+            </div>
+            <div className="text-2xl font-extrabold text-[#B91C1C] font-mono">
+              {batch.rejected_rows.toLocaleString()}
+            </div>
+            <div className="text-[11px] text-[#B91C1C] mt-1 font-medium">
+              Quota breaches & clashes blocked
+            </div>
+          </div>
+        </div>
+
+        {/* Action & Filter Bar */}
+        <div className="bg-white border border-[#E2E8F0] rounded p-3 mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
+          {/* Outcome Filter Tabs */}
+          <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded border border-slate-200 text-xs">
+            <button
+              onClick={() => setOutcomeFilter("all")}
+              className={`px-3 py-1 rounded font-medium transition-colors ${
+                outcomeFilter === "all"
+                  ? "bg-white text-[#0F172A] shadow-xs font-semibold"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              All Records ({batch.total_rows})
+            </button>
+            <button
+              onClick={() => setOutcomeFilter("rejected")}
+              className={`px-3 py-1 rounded font-medium transition-colors ${
+                outcomeFilter === "rejected"
+                  ? "bg-[#FEF2F2] text-[#B91C1C] shadow-xs font-semibold border border-[#FECACA]"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Blocking Errors Only ({batch.rejected_rows})
+            </button>
+            <button
+              onClick={() => setOutcomeFilter("flagged")}
+              className={`px-3 py-1 rounded font-medium transition-colors ${
+                outcomeFilter === "flagged"
+                  ? "bg-[#FFFBEB] text-[#B45309] shadow-xs font-semibold border border-[#FDE68A]"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Warnings ({batch.flagged_rows})
+            </button>
+            <button
+              onClick={() => setOutcomeFilter("accepted")}
+              className={`px-3 py-1 rounded font-medium transition-colors ${
+                outcomeFilter === "accepted"
+                  ? "bg-[#F0FDF4] text-[#15803D] shadow-xs font-semibold border border-[#BBF7D0]"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Accepted ({batch.accepted_rows})
+            </button>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full md:w-72">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              placeholder="Search student, APAAR, rule..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full text-xs bg-slate-50 border border-[#E2E8F0] rounded pl-9 pr-3 py-2 text-slate-900 focus:outline-hidden focus:border-[#1D4ED8] focus:bg-white transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Virtualized / Inspection Grid Table */}
+        <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-[#E2E8F0] text-xs">
+              <thead className="bg-slate-100/80">
+                <tr>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-16">
+                    Row #
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-48">
+                    Student Identifiers
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-28">
+                    Programme
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-28">
+                    Category
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-28">
+                    Validation Status
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px] w-28">
+                    Fired Rule
+                  </th>
+                  <th className="px-3 py-3 text-left font-mono text-slate-600 uppercase text-[11px]">
+                    Actionable Reason / Remediation
+                  </th>
+                  <th className="px-3 py-3 text-right font-mono text-slate-600 uppercase text-[11px] w-20">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E2E8F0] bg-white">
+                {filteredItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="px-4 py-12 text-center text-slate-500">
+                      <div className="max-w-xs mx-auto">
+                        <Filter className="w-6 h-6 text-slate-400 mx-auto mb-2" />
+                        <div className="text-xs font-semibold text-slate-700">
+                          No Records Matching Filter Criteria
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1">
+                          Try adjusting search terms or switching outcome filters.
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredItems.map((item) => {
+                    const primaryViolation = item.violations[0];
+                    const isSelected = selectedRow?.row_index === item.row_index;
+
+                    return (
+                      <tr
+                        key={item.row_index}
+                        onClick={() => setSelectedRow(item)}
+                        className={`cursor-pointer transition-colors ${
+                          isSelected
+                            ? "bg-blue-50/70"
+                            : item.status === "rejected"
+                            ? "hover:bg-red-50/40"
+                            : item.status === "flagged"
+                            ? "hover:bg-amber-50/40"
+                            : "hover:bg-slate-50"
+                        }`}
+                      >
+                        <td className="px-3 py-3 font-mono text-slate-500 font-semibold">
+                          #{item.row_index}
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="font-semibold text-slate-900">
+                            {item.full_name}
+                          </div>
+                          <div className="font-mono text-[11px] text-slate-500">
+                            {item.apaar_id ? (
+                              item.apaar_id
+                            ) : (
+                              <span className="text-amber-700 italic">No APAAR</span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 font-mono text-slate-700 font-medium">
+                          {item.programme_code}
+                        </td>
+                        <td className="px-3 py-3 uppercase font-mono text-[11px] text-slate-700">
+                          {item.admission_category}
+                        </td>
+                        <td className="px-3 py-3">
+                          <StatusBadge status={item.status} size="sm" />
+                        </td>
+                        <td className="px-3 py-3 font-mono font-bold text-xs">
+                          {primaryViolation ? (
+                            <span
+                              className={
+                                primaryViolation.severity === "blocking"
+                                  ? "text-[#B91C1C]"
+                                  : "text-[#B45309]"
+                              }
+                            >
+                              {primaryViolation.rule_code}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 font-normal">—</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-3 text-slate-700">
+                          {primaryViolation ? (
+                            <div>
+                              <span className="font-medium">
+                                {primaryViolation.rule_description}
+                              </span>
+                              <div className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                                {primaryViolation.remediation_hint}
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-[#15803D] font-medium flex items-center">
+                              <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                              Passed all deterministic regulatory checks
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-3 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedRow(item);
+                            }}
+                            className="text-xs font-mono text-[#1D4ED8] hover:text-[#1E40AF] hover:underline"
+                          >
+                            Inspect
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="p-3 bg-slate-50 border-t border-[#E2E8F0] flex items-center justify-between text-xs text-slate-500">
+            <span>
+              Showing {filteredItems.length} of {batch.total_rows} total submissions
+            </span>
+            <span className="font-mono text-[11px]">
+              Click any line-item to inspect JSON evidence and remediation instructions
+            </span>
+          </div>
+        </div>
+      </main>
+
+      {/* Slide-Over Drawer (Record Remediation Panel) */}
+      {selectedRow && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <div
+            onClick={() => setSelectedRow(null)}
+            className="absolute inset-0 bg-slate-900/40 transition-opacity"
+          />
+
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-lg bg-white border-l border-[#E2E8F0] shadow-2xl flex flex-col">
+              {/* Drawer Header */}
+              <div className="p-5 border-b border-[#E2E8F0] bg-slate-50 flex items-center justify-between">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs font-bold text-slate-500">
+                      ROW #{selectedRow.row_index}
+                    </span>
+                    <StatusBadge status={selectedRow.status} size="sm" />
+                  </div>
+                  <h3 className="text-base font-bold text-[#0F172A] mt-1">
+                    {selectedRow.full_name}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSelectedRow(null)}
+                  className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Drawer Body */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* Enrolment Record Summary */}
+                <div className="bg-slate-50 border border-[#E2E8F0] rounded p-4">
+                  <div className="text-[11px] font-mono uppercase font-bold text-slate-500 mb-3 flex items-center">
+                    <GraduationCap className="w-4 h-4 mr-1.5 text-slate-600" />
+                    Enrolment Specifications
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <span className="text-slate-500 block">APAAR Identifier:</span>
+                      <span className="font-mono font-bold text-slate-900">
+                        {selectedRow.apaar_id || "Voluntary Missing"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block">Programme Code:</span>
+                      <span className="font-mono font-bold text-slate-900">
+                        {selectedRow.programme_code}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block">Academic Year:</span>
+                      <span className="font-mono text-slate-900">
+                        {selectedRow.academic_year}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block">Admission Category:</span>
+                      <span className="font-mono uppercase text-slate-900">
+                        {selectedRow.admission_category}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block">Admission Start Date:</span>
+                      <span className="font-mono text-slate-900">
+                        {selectedRow.start_date}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block">Gender:</span>
+                      <span className="capitalize text-slate-900">
+                        {selectedRow.gender}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Validation Status & Fired Rules */}
+                <div>
+                  <div className="text-[11px] font-mono uppercase font-bold text-slate-500 mb-3 flex items-center">
+                    <ShieldAlert className="w-4 h-4 mr-1.5 text-slate-600" />
+                    Regulatory Engine Evaluation
+                  </div>
+
+                  {selectedRow.violations.length === 0 ? (
+                    <div className="p-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded">
+                      <div className="flex items-center space-x-2 text-[#15803D] font-bold text-xs uppercase font-mono">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>All Compliance Checks Passed</span>
+                      </div>
+                      <p className="text-xs text-slate-700 mt-2">
+                        This candidate record conforms to approved program intake limits, academic year syntax, and non-concurrent timeline requirements. Promoted directly to the AICTE central repository.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {selectedRow.violations.map((violation, vIdx) => (
+                        <div
+                          key={vIdx}
+                          className={`p-4 rounded border ${
+                            violation.severity === "blocking"
+                              ? "bg-[#FEF2F2] border-[#FECACA]"
+                              : "bg-[#FFFBEB] border-[#FDE68A]"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-mono font-bold text-xs text-slate-900">
+                              Rule {violation.rule_code}
+                            </span>
+                            <StatusBadge status={violation.severity} size="sm" />
+                          </div>
+
+                          <div className="text-xs font-bold text-slate-900 mb-1">
+                            {violation.rule_description}
+                          </div>
+
+                          {/* Actionable Remediation Instruction */}
+                          <div className="mt-3 p-2.5 bg-white rounded border border-[#E2E8F0]">
+                            <div className="text-[10px] font-mono uppercase font-bold text-slate-500 mb-0.5">
+                              Remediation Directive:
+                            </div>
+                            <div className="text-xs text-slate-800 font-medium">
+                              {violation.remediation_hint}
+                            </div>
+                          </div>
+
+                          {/* Formatted JSON Evidence Payload */}
+                          <div className="mt-3">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold flex items-center">
+                                <FileCode className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                                Diagnostic Evidence Payload
+                              </span>
+                            </div>
+                            <pre className="text-[11px] font-mono bg-[#0F172A] text-slate-100 p-3 rounded overflow-x-auto border border-slate-800">
+                              {JSON.stringify(violation.evidence_payload, null, 2)}
+                            </pre>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Drawer Footer */}
+              <div className="p-4 border-t border-[#E2E8F0] bg-slate-50 flex items-center justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedRow(null)}
+                  className="text-xs font-semibold text-slate-700 hover:text-slate-900 px-4 py-2 rounded border border-[#E2E8F0] hover:bg-slate-100 transition-colors"
+                >
+                  Close Panel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

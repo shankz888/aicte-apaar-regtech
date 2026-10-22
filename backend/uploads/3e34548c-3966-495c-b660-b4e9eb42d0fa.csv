@@ -1,0 +1,4 @@
+apaar_id,full_name,gender,programme_code,academic_year,admission_category,start_date,end_date
+100000000010,Student One,male,BTECH-CSE,2026-2027,general,2026-08-01,
+100000000028,Student Two,female,BTECH-CSE,2026-2027,general,2026-08-01,
+100000000036,Student Three,male,BTECH-CSE,2026-2027,general,2026-08-01,
