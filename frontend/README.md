@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# APAAR RegTech frontend
 
-## Getting Started
+This Next.js 14 App Router application provides the SIH 2026 project landing page and role-based demo workspaces. The repository overview, route map, backend setup, and contributor handoff notes are in the root [README](../README.md).
 
-First, run the development server:
+## Run locally
 
-```bash
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. The UI expects the FastAPI backend at `http://127.0.0.1:8000` for live API-driven data and actions. Configure `NEXT_PUBLIC_API_URL` before starting Next.js to change that target.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Check changes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+npm run build
+npm run lint
+```
 
-## Learn More
+## Shared UI components
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `components/backgrounds/global-effects.tsx`: site-wide cursor-reactive MicroSlats background and safe scroll reveals.
+- `components/backgrounds/micro-slats.tsx`: WebGL slat background renderer.
+- `components/layout/app-header.tsx`: shared workspace header and line sidebar.
+- `components/ui/animated-role-list.tsx`: accessible animated role selector.
+- `components/ui/glass-icon.tsx`: glass treatment for workspace icons.

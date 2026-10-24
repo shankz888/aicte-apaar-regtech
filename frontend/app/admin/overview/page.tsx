@@ -159,25 +159,25 @@ export default function AdminOverviewPage() {
   const uniqueStates = Array.from(new Set(capacityRows.map((r) => r.state)));
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-transparent">
       <AppHeader />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 workspace-main workspace-main">
         {/* Top Title & Control Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E2E8F0]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-violet-200/10">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                 REGULATORY COMMAND CONSOLE (SCREEN S-04)
               </span>
-              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-300">
+              <span className="bg-emerald-400/10 text-emerald-100 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-300/25">
                 LIVE AUDIT ACTIVE
               </span>
             </div>
-            <h1 className="text-2xl font-extrabold text-[#0F172A] tracking-tight mt-1">
+            <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">
               AICTE Central Compliance & Capacity Reconciliation Matrix
             </h1>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               National aggregate oversight across approved intake capacities, active concurrent clashes, and regulatory remediation manifests.
             </p>
           </div>
@@ -186,14 +186,14 @@ export default function AdminOverviewPage() {
             <button
               onClick={fetchOverview}
               disabled={isLoading}
-              className="inline-flex items-center text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 px-3 py-2 rounded shadow-sm transition"
+              className="glass-panel inline-flex items-center text-xs font-medium text-slate-200 bg-white/[0.045] hover:bg-white/[0.035] border border-violet-200/20 px-3 py-2 rounded shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] transition"
             >
-              <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isLoading ? "animate-spin text-blue-600" : "text-slate-500"}`} />
+              <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isLoading ? "animate-spin text-violet-300" : "text-slate-400"}`} />
               Refresh Feeds
             </button>
             <Link
               href="/admin/benchmark"
-              className="inline-flex items-center text-xs font-medium text-white bg-[#1D4ED8] hover:bg-[#1E40AF] px-3.5 py-2 rounded shadow-sm transition"
+              className="inline-flex items-center text-xs font-medium text-white bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 specular-button hover:from-violet-500 hover:via-purple-500 hover:to-fuchsia-500 px-3.5 py-2 rounded shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] transition"
             >
               Run Benchmark Suite
             </Link>
@@ -202,82 +202,82 @@ export default function AdminOverviewPage() {
 
         {/* Top 4 KPI Blocks */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white border border-[#E2E8F0] p-4 rounded-lg shadow-sm">
+          <div className="glass-panel p-4 rounded-lg shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Monitored Institutions
               </span>
               <Building2 className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="text-2xl font-extrabold text-[#0F172A] mt-2">
+            <div className="text-2xl font-extrabold text-white mt-2">
               {summary ? summary.total_institutions.toLocaleString() : "..."}
             </div>
-            <div className="text-[11px] text-slate-500 mt-1 flex items-center">
-              <span className="text-[#15803D] font-semibold mr-1">100% compliant</span>
+            <div className="text-[11px] text-slate-400 mt-1 flex items-center">
+              <span className="text-emerald-200 font-semibold mr-1">100% compliant</span>
               institutions registered
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-4 rounded-lg shadow-sm">
+          <div className="glass-panel p-4 rounded-lg shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Enrolment vs Sanctioned Cap
               </span>
               <Users className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="text-2xl font-extrabold text-[#0F172A] mt-2">
+            <div className="text-2xl font-extrabold text-white mt-2">
               {summary
                 ? `${summary.verified_enrolments.toLocaleString()} / ${summary.sanctioned_capacity.toLocaleString()}`
                 : "..."}
             </div>
-            <div className="w-full bg-slate-100 rounded-full h-1.5 mt-2 overflow-hidden">
+            <div className="w-full bg-white/[0.07] rounded-full h-1.5 mt-2 overflow-hidden">
               <div
-                className="bg-[#1D4ED8] h-1.5 rounded-full"
+                className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 h-1.5 rounded-full"
                 style={{ width: `${Math.min(100, summary?.utilization_rate_pct || 0)}%` }}
               />
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-4 rounded-lg shadow-sm">
+          <div className="glass-panel p-4 rounded-lg shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 National Capacity Utilization
               </span>
               <BarChart3 className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="text-2xl font-extrabold text-[#0F172A] mt-2">
+            <div className="text-2xl font-extrabold text-white mt-2">
               {summary ? `${summary.utilization_rate_pct}%` : "..."}
             </div>
-            <div className="text-[11px] text-slate-500 mt-1">
+            <div className="text-[11px] text-slate-400 mt-1">
               Threshold ceiling: 100.0% max sanctioned
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] p-4 rounded-lg shadow-sm">
+          <div className="glass-panel p-4 rounded-lg shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Active Concurrent Disputes
               </span>
-              <ShieldAlert className="w-4 h-4 text-amber-600" />
+              <ShieldAlert className="w-4 h-4 text-amber-300" />
             </div>
-            <div className="text-2xl font-extrabold text-amber-700 mt-2">
+            <div className="text-2xl font-extrabold text-amber-200 mt-2">
               {summary ? summary.active_disputes_count : "..."}
             </div>
-            <div className="text-[11px] text-slate-500 mt-1">
+            <div className="text-[11px] text-slate-400 mt-1">
               Rule DUP-002 cross-institutional clashes
             </div>
           </div>
         </div>
 
         {/* Module 1: National Intake Capacity vs Actual Enrolments */}
-        <section className="bg-white border border-[#E2E8F0] rounded-xl shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-[#E2E8F0] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <section className="glass-panel rounded-xl shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] overflow-hidden">
+          <div className="p-5 border-b border-violet-200/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="text-base font-bold text-[#0F172A] flex items-center">
-                <BarChart3 className="w-4 h-4 mr-2 text-blue-600" />
+              <h2 className="text-base font-bold text-white flex items-center">
+                <BarChart3 className="w-4 h-4 mr-2 text-violet-300" />
                 National Intake Capacity vs. Actual Enrolments
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 Grouped state-level and programme breakdown. Enforces CAP-001 (Intake Quota) and CAP-002 (NRI Cap).
               </p>
             </div>
@@ -288,7 +288,7 @@ export default function AdminOverviewPage() {
               <select
                 value={stateFilter}
                 onChange={(e) => setStateFilter(e.target.value)}
-                className="text-xs bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="glass-control text-xs bg-white/[0.035] border border-violet-200/20 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-400"
               >
                 <option value="ALL">All Jurisdictions ({uniqueStates.length} States)</option>
                 {uniqueStates.map((st) => (
@@ -303,7 +303,7 @@ export default function AdminOverviewPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-slate-50 border-b border-[#E2E8F0] text-slate-600 font-semibold uppercase tracking-wider text-[11px]">
+                <tr className="bg-white/[0.035] border-b border-violet-200/10 text-slate-300 font-semibold uppercase tracking-wider text-[11px]">
                   <th className="py-3 px-4">State / Territory</th>
                   <th className="py-3 px-4">Programme</th>
                   <th className="py-3 px-4 text-center">Colleges</th>
@@ -314,7 +314,7 @@ export default function AdminOverviewPage() {
                   <th className="py-3 px-4 text-center">Compliance Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E2E8F0]">
+              <tbody className="divide-y divide-violet-200/10">
                 {filteredCapacity.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="py-8 text-center text-slate-400">
@@ -323,34 +323,34 @@ export default function AdminOverviewPage() {
                   </tr>
                 ) : (
                   filteredCapacity.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-4 font-semibold text-[#0F172A]">{item.state}</td>
+                    <tr key={idx} className="hover:bg-white/[0.045] transition-colors">
+                      <td className="py-3 px-4 font-semibold text-white">{item.state}</td>
                       <td className="py-3 px-4">
-                        <div className="font-semibold text-slate-800">{item.programme_code}</div>
-                        <div className="text-[11px] text-slate-500 truncate max-w-xs">
+                        <div className="font-semibold text-slate-200">{item.programme_code}</div>
+                        <div className="text-[11px] text-slate-400 truncate max-w-xs">
                           {item.programme_name}
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-center font-mono text-slate-700">
+                      <td className="py-3 px-4 text-center font-mono text-slate-200">
                         {item.institutions_count}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-medium text-slate-800">
+                      <td className="py-3 px-4 text-right font-mono font-medium text-slate-200">
                         {item.approved_capacity.toLocaleString()}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">
+                      <td className="py-3 px-4 text-right font-mono font-bold text-slate-100">
                         {item.actual_enrolments.toLocaleString()}
                       </td>
-                      <td className="py-3 px-4 text-right font-mono text-slate-600">
+                      <td className="py-3 px-4 text-right font-mono text-slate-300">
                         {item.nri_enrolments} / {item.nri_quota}
                       </td>
                       <td className="py-3 px-4 text-right font-mono font-bold">
                         <span
                           className={
                             item.status === "breached"
-                              ? "text-[#B91C1C]"
+                              ? "text-rose-200"
                               : item.status === "warning"
-                              ? "text-[#B45309]"
-                              : "text-[#15803D]"
+                              ? "text-amber-100"
+                              : "text-emerald-200"
                           }
                         >
                           {item.utilization_pct}%
@@ -358,15 +358,15 @@ export default function AdminOverviewPage() {
                       </td>
                       <td className="py-3 px-4 text-center">
                         {item.status === "breached" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FEF2F2] text-[#B91C1C] border border-[#FECACA]">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-400/10 text-rose-200 border border-rose-300/25">
                             CAP OVERRUN
                           </span>
                         ) : item.status === "warning" ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-300/10 text-amber-100 border border-amber-200/25">
                             NEAR CAPACITY
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#F0FDF4] text-[#15803D] border border-[#BBF7D0]">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-400/10 text-emerald-200 border border-emerald-300/25">
                             NORMAL
                           </span>
                         )}
@@ -382,18 +382,18 @@ export default function AdminOverviewPage() {
         {/* Lower Two Columns: Exception Stream & Dispute Queue */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Module 2: Real-time Exception Stream */}
-          <section className="bg-white border border-[#E2E8F0] rounded-xl shadow-sm p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <section className="glass-panel rounded-xl shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-violet-200/10">
               <div>
-                <h2 className="text-base font-bold text-[#0F172A] flex items-center">
-                  <ShieldAlert className="w-4 h-4 mr-2 text-red-600" />
+                <h2 className="text-base font-bold text-white flex items-center">
+                  <ShieldAlert className="w-4 h-4 mr-2 text-rose-300" />
                   Real-Time Exception Stream
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   Institutional batches with &gt;5% rejection rates or blocking compliance infractions.
                 </p>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">
+              <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-rose-400/10 text-rose-200 border border-rose-300/25 rounded">
                 {exceptionStream.length} Flagged
               </span>
             </div>
@@ -407,24 +407,24 @@ export default function AdminOverviewPage() {
                 exceptionStream.map((item) => (
                   <div
                     key={item.batch_id}
-                    className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                    className="p-3.5 glass-control rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
                   >
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-slate-900">{item.institution_name}</span>
-                        <span className="text-[10px] font-mono text-slate-500">#{item.aicte_id}</span>
-                        <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded">
+                        <span className="font-bold text-slate-100">{item.institution_name}</span>
+                        <span className="text-[10px] font-mono text-slate-400">#{item.aicte_id}</span>
+                        <span className="text-[10px] bg-white/10 text-slate-200 px-1.5 py-0.2 rounded">
                           {item.state}
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-500 font-mono mt-1">
-                        File: {item.original_filename} • {item.total_rows} total rows
+                      <div className="text-[11px] text-slate-400 font-mono mt-1">
+                        File: {item.original_filename}  |  {item.total_rows} total rows
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-3">
                       <div className="text-right">
-                        <div className="font-mono font-bold text-red-700 text-sm">
+                        <div className="font-mono font-bold text-rose-200 text-sm">
                           {item.rejected_rows} Rejected ({item.rejection_rate_pct}%)
                         </div>
                         <div className="text-[10px] text-slate-400">
@@ -435,7 +435,7 @@ export default function AdminOverviewPage() {
                       <Link
                         href={`/institution/batches/${item.batch_id}`}
                         title="Inspect Batch Remediation Manifest"
-                        className="p-1.5 bg-white hover:bg-slate-100 border border-slate-300 rounded text-slate-600 hover:text-slate-900 transition"
+                        className="glass-panel p-1.5 bg-white/[0.045] hover:bg-white/[0.07] border border-violet-200/20 rounded text-slate-300 hover:text-slate-100 transition"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                       </Link>
@@ -447,18 +447,18 @@ export default function AdminOverviewPage() {
           </section>
 
           {/* Module 3: Duplicate Dispute Queue (DUP-002) */}
-          <section className="bg-white border border-[#E2E8F0] rounded-xl shadow-sm p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <section className="glass-panel rounded-xl shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-violet-200/10">
               <div>
-                <h2 className="text-base font-bold text-[#0F172A] flex items-center">
-                  <AlertTriangle className="w-4 h-4 mr-2 text-amber-600" />
+                <h2 className="text-base font-bold text-white flex items-center">
+                  <AlertTriangle className="w-4 h-4 mr-2 text-amber-300" />
                   Duplicate Dispute Queue (Rule DUP-002)
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   Cross-institutional active concurrent enrolment conflicts requiring AICTE mediation.
                 </p>
               </div>
-              <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded">
+              <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-amber-300/10 text-amber-100 border border-amber-200/25 rounded">
                 {disputeQueue.length} Active
               </span>
             </div>
@@ -472,42 +472,42 @@ export default function AdminOverviewPage() {
                 disputeQueue.map((dispute) => (
                   <div
                     key={dispute.dispute_id}
-                    className="p-3.5 bg-white border border-slate-200 rounded-lg space-y-2 text-xs"
+                    className="p-3.5 glass-panel rounded-lg space-y-2 text-xs"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-slate-900">{dispute.student_name}</span>
-                        <span className="font-mono text-[11px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+                        <span className="font-bold text-slate-100">{dispute.student_name}</span>
+                        <span className="font-mono text-[11px] bg-white/[0.07] text-slate-200 px-1.5 py-0.5 rounded border border-violet-200/10">
                           APAAR: {dispute.masked_apaar}
                         </span>
                       </div>
                       <span
                         className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${
                           dispute.dispute_status === "resolved"
-                            ? "bg-green-100 text-green-800 border border-green-200"
-                            : "bg-amber-100 text-amber-800 border border-amber-200"
+                            ? "bg-emerald-400/10 text-emerald-100 border border-emerald-300/25"
+                            : "bg-amber-300/10 text-amber-100 border border-amber-200/25"
                         }`}
                       >
                         {dispute.dispute_status}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded border border-slate-100">
+                    <div className="glass-control grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] bg-white/[0.035] p-2.5 rounded border border-violet-200/[0.08]">
                       <div>
                         <div className="text-slate-400 uppercase text-[9px] font-semibold">Claimant (New Enrolment)</div>
-                        <div className="font-semibold text-slate-800 truncate">{dispute.claiming_institution}</div>
-                        <div className="text-[10px] font-mono text-slate-500">#{dispute.claiming_aicte_id}</div>
+                        <div className="font-semibold text-slate-200 truncate">{dispute.claiming_institution}</div>
+                        <div className="text-[10px] font-mono text-slate-400">#{dispute.claiming_aicte_id}</div>
                       </div>
                       <div>
                         <div className="text-slate-400 uppercase text-[9px] font-semibold">Incumbent (Active Prior Record)</div>
-                        <div className="font-semibold text-slate-800 truncate">{dispute.incumbent_institution}</div>
-                        <div className="text-[10px] font-mono text-slate-500">#{dispute.incumbent_aicte_id}</div>
+                        <div className="font-semibold text-slate-200 truncate">{dispute.incumbent_institution}</div>
+                        <div className="text-[10px] font-mono text-slate-400">#{dispute.incumbent_aicte_id}</div>
                       </div>
                     </div>
 
                     {dispute.resolution_action && (
-                      <div className="text-[11px] text-emerald-800 bg-emerald-50 p-2 rounded border border-emerald-200 font-mono">
-                        Action: <strong>{dispute.resolution_action}</strong> • Notes: {dispute.resolution_notes || "None"}
+                      <div className="text-[11px] text-emerald-100 bg-emerald-400/10 p-2 rounded border border-emerald-300/25 font-mono">
+                        Action: <strong>{dispute.resolution_action}</strong>  |  Notes: {dispute.resolution_notes || "None"}
                       </div>
                     )}
 
@@ -523,7 +523,7 @@ export default function AdminOverviewPage() {
                             setResolutionNotes("");
                             setResolveFeedback(null);
                           }}
-                          className="px-2.5 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded transition"
+                          className="px-2.5 py-1 text-xs font-semibold text-violet-200 bg-violet-400/10 hover:bg-violet-300/15 border border-violet-200/20 rounded transition"
                         >
                           Mediate Conflict
                         </button>
@@ -540,20 +540,20 @@ export default function AdminOverviewPage() {
       {/* Dispute Mediation Modal Drawer */}
       {selectedDispute && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl border border-slate-200 max-w-lg w-full p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="glass-panel bg-white/[0.045] rounded-xl shadow-xl border border-violet-200/10 max-w-lg w-full p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-violet-200/10">
               <div>
-                <h3 className="font-bold text-slate-900 text-sm">Regulatory Dispute Mediation</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <h3 className="font-bold text-slate-100 text-sm">Regulatory Dispute Mediation</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
                   Resolution determination for concurrent enrolment conflict (Rule DUP-002)
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedDispute(null)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-slate-400 hover:text-slate-300 p-1"
               >
-                ✕
+                âœ•
               </button>
             </div>
 
@@ -561,8 +561,8 @@ export default function AdminOverviewPage() {
               <div
                 className={`p-3 text-xs rounded border ${
                   resolveFeedback.includes("successfully")
-                    ? "bg-green-50 text-green-800 border-green-200"
-                    : "bg-red-50 text-red-800 border-red-200"
+                    ? "bg-emerald-400/10 text-emerald-100 border-emerald-300/25"
+                    : "bg-rose-400/10 text-rose-100 border-rose-300/25"
                 }`}
               >
                 {resolveFeedback}
@@ -571,8 +571,8 @@ export default function AdminOverviewPage() {
 
             <form onSubmit={handleResolveDispute} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Target Conflict Record</label>
-                <div className="bg-slate-50 p-3 rounded border border-slate-200 font-mono text-[11px] space-y-1">
+                <label className="block font-semibold text-slate-200 mb-1">Target Conflict Record</label>
+                <div className="glass-control bg-white/[0.035] p-3 rounded border border-violet-200/10 font-mono text-[11px] space-y-1">
                   <div>
                     Student: <strong>{selectedDispute.student_name}</strong> (APAAR: {selectedDispute.masked_apaar})
                   </div>
@@ -582,11 +582,11 @@ export default function AdminOverviewPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Regulatory Determination</label>
+                <label className="block font-semibold text-slate-200 mb-1">Regulatory Determination</label>
                 <select
                   value={resolutionAction}
                   onChange={(e) => setResolutionAction(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="glass-control w-full bg-white/[0.035] border border-violet-200/20 rounded p-2 text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-400"
                 >
                   <option value="uphold_claimant">
                     Uphold Claimant (Confirm Transfer / Release Prior Record)
@@ -601,13 +601,13 @@ export default function AdminOverviewPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Statutory Remarks / Evidence Reference</label>
+                <label className="block font-semibold text-slate-200 mb-1">Statutory Remarks / Evidence Reference</label>
                 <textarea
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   rows={3}
                   placeholder="e.g., Verified TC No. 2026-MH-4921 issued on 2026-08-01. Prior enrolment cleared."
-                  className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="glass-control w-full bg-white/[0.035] border border-violet-200/20 rounded p-2 text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-400"
                 />
               </div>
 
@@ -615,14 +615,14 @@ export default function AdminOverviewPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedDispute(null)}
-                  className="px-3 py-1.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
+                  className="glass-control px-3 py-1.5 rounded border border-violet-200/20 text-slate-200 hover:bg-white/[0.035] transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isResolving}
-                  className="px-4 py-1.5 rounded bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-medium transition shadow-sm"
+                  className="px-4 py-1.5 rounded bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 specular-button hover:from-violet-500 hover:via-purple-500 hover:to-fuchsia-500 text-white font-medium transition shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]"
                 >
                   {isResolving ? "Recording Decision..." : "Execute Regulatory Mediation"}
                 </button>
@@ -634,3 +634,9 @@ export default function AdminOverviewPage() {
     </div>
   );
 }
+
+
+
+
+
+

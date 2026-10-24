@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { GlobalEffects } from "@/components/backgrounds/global-effects";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AICTE Student Data Verification",
-  description: "AICTE student data management and verification platform",
+  title: "APAAR RegTech | AICTE | SIH 2026",
+  description: "A secure regulatory workspace for enrolment validation, intake compliance and privacy-preserving verification.",
 };
 
 export default function RootLayout({
@@ -28,8 +29,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GlobalEffects />
         {children}
       </body>
     </html>
   );
 }
+
+
+
+
+
+

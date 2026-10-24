@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { AppHeader } from "@/components/layout/app-header";
 import {
   ShieldCheck,
   ShieldAlert,
@@ -101,51 +102,50 @@ export default function VerifierGatewayPage({
     setTimeout(() => setCopiedHash(false), 2000);
   };
 
-  return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
+  return (<><AppHeader /><main className="workspace-main min-h-screen bg-transparent flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
       {/* Isolated Purpose-Bound Gateway Container */}
       <div className="w-full max-w-xl">
         {/* Gateway Brand Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center p-2.5 bg-[#0F172A] rounded-lg shadow-sm mb-3">
-            <ShieldCheck className="w-6 h-6 text-blue-400" />
+          <div className="inline-flex items-center justify-center p-2.5 bg-[#190C29] rounded-lg shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] mb-3">
+            <ShieldCheck className="w-6 h-6 text-violet-300" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-[#0F172A]">
+          <h1 className="text-xl font-bold tracking-tight text-white">
             AICTE Academic Verification Gateway
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Zero-Knowledge Purpose-Bound Credential Assertion
           </p>
         </div>
 
         {loading ? (
-          <div className="bg-white border border-[#E2E8F0] rounded p-12 text-center shadow-sm">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#1D4ED8] mx-auto mb-3" />
-            <h3 className="text-sm font-semibold text-[#0F172A]">
+          <div className="glass-panel rounded p-12 text-center shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
+            <RefreshCw className="w-8 h-8 animate-spin text-violet-200 mx-auto mb-3" />
+            <h3 className="text-sm font-semibold text-white">
               Verifying Cryptographic Assertion...
             </h3>
-            <p className="text-xs text-slate-500 mt-1 font-mono">
+            <p className="text-xs text-slate-400 mt-1 font-mono">
               Validating HMAC-SHA256 signature against central registry
             </p>
           </div>
         ) : !data || !data.valid ? (
           /* Invalid / Expired / Revoked Card */
-          <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden shadow-sm">
-            <div className="p-6 text-center border-b border-[#E2E8F0] bg-[#FEF2F2]">
+          <div className="glass-panel rounded overflow-hidden shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
+            <div className="p-6 text-center border-b border-violet-200/10 bg-rose-400/10">
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#B91C1C] text-white font-mono font-bold text-xs uppercase tracking-wider mb-2">
                 <ShieldAlert className="w-4 h-4 mr-1.5" />
                 {data?.status || "UNABLE TO VERIFY"}
               </div>
-              <h2 className="text-sm font-bold text-[#0F172A] mt-2">
+              <h2 className="text-sm font-bold text-white mt-2">
                 Credential Assertion Unavailable
               </h2>
-              <p className="text-xs text-slate-600 mt-1 max-w-md mx-auto">
+              <p className="text-xs text-slate-300 mt-1 max-w-md mx-auto">
                 {data?.reason ||
                   "This verification link has expired, was revoked by the student, or contains an invalid cryptographic signature."}
               </p>
             </div>
 
-            <div className="p-4 bg-slate-50 text-center text-xs text-slate-500 border-t border-[#E2E8F0]">
+            <div className="p-4 bg-white/[0.035] text-center text-xs text-slate-400 border-t border-violet-200/10">
               <div className="flex items-center justify-center space-x-1.5">
                 <Lock className="w-3.5 h-3.5 text-slate-400" />
                 <span>
@@ -156,74 +156,74 @@ export default function VerifierGatewayPage({
           </div>
         ) : (
           /* Verified Assertion Card */
-          <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden shadow-sm">
+          <div className="glass-panel rounded overflow-hidden shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
             {/* Prominent Verification Badge */}
-            <div className="p-6 text-center border-b border-[#E2E8F0] bg-[#F0FDF4]">
+            <div className="p-6 text-center border-b border-violet-200/10 bg-emerald-400/10">
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#15803D] text-white font-mono font-bold text-xs uppercase tracking-wider shadow-xs">
                 <ShieldCheck className="w-4 h-4 mr-1.5" />
                 {data.status}
               </div>
-              <div className="text-xs font-mono text-slate-600 mt-2">
+              <div className="text-xs font-mono text-slate-300 mt-2">
                 Verified against AICTE Central Regulatory Database
               </div>
             </div>
 
             {/* Permitted Minimal Disclosure Grid (Zero PII, Zero APAAR, Zero DOB) */}
             <div className="p-6 space-y-4">
-              <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold border-b border-[#E2E8F0] pb-2">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold border-b border-violet-200/10 pb-2">
                 Permitted Disclosure Data
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div>
-                  <span className="text-slate-500 block mb-0.5">Student Full Name:</span>
-                  <span className="text-sm font-bold text-[#0F172A] block">
+                  <span className="text-slate-400 block mb-0.5">Student Full Name:</span>
+                  <span className="text-sm font-bold text-white block">
                     {data.assertion?.student_full_name}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-500 block mb-0.5 flex items-center">
+                  <span className="text-slate-400 block mb-0.5 flex items-center">
                     <Building2 className="w-3.5 h-3.5 mr-1 text-slate-400" />
                     Enrolled Institution:
                   </span>
-                  <span className="font-semibold text-slate-900 block">
+                  <span className="font-semibold text-slate-100 block">
                     {data.assertion?.institution_name}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-500 block mb-0.5 flex items-center">
+                  <span className="text-slate-400 block mb-0.5 flex items-center">
                     <GraduationCap className="w-3.5 h-3.5 mr-1 text-slate-400" />
                     Programme Name:
                   </span>
-                  <span className="font-medium text-slate-800 block">
+                  <span className="font-medium text-slate-200 block">
                     {data.assertion?.programme_name}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-slate-500 block mb-0.5 flex items-center">
+                  <span className="text-slate-400 block mb-0.5 flex items-center">
                     <Calendar className="w-3.5 h-3.5 mr-1 text-slate-400" />
                     Academic Enrolment Year:
                   </span>
-                  <span className="font-mono font-medium text-slate-800 block">
+                  <span className="font-mono font-medium text-slate-200 block">
                     {data.assertion?.academic_year}
                   </span>
                 </div>
 
-                <div className="sm:col-span-2 pt-2 border-t border-slate-100">
-                  <span className="text-slate-500 block mb-0.5">Verified Status:</span>
-                  <span className="inline-flex items-center text-xs font-semibold text-[#15803D] bg-[#F0FDF4] border border-[#BBF7D0] px-2.5 py-0.5 rounded font-mono">
-                    ✓ {data.assertion?.enrolment_status}
+                <div className="sm:col-span-2 pt-2 border-t border-violet-200/[0.08]">
+                  <span className="text-slate-400 block mb-0.5">Verified Status:</span>
+                  <span className="inline-flex items-center text-xs font-semibold text-emerald-200 bg-emerald-400/10 border border-emerald-300/25 px-2.5 py-0.5 rounded font-mono">
+                    âœ“ {data.assertion?.enrolment_status}
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Cryptographic Assertion Box */}
-            <div className="p-6 bg-slate-50 border-t border-[#E2E8F0] space-y-3">
-              <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold">
+            <div className="p-6 bg-white/[0.035] border-t border-violet-200/10 space-y-3">
+              <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">
                 <span className="flex items-center">
                   <Lock className="w-3.5 h-3.5 mr-1 text-slate-400" />
                   Cryptographic Proof Assertion
@@ -233,7 +233,7 @@ export default function VerifierGatewayPage({
 
               {/* Hash Viewport with Copy Button */}
               <div className="relative">
-                <div className="bg-[#0F172A] text-slate-200 font-mono text-[11px] p-2.5 rounded border border-slate-800 break-all pr-10">
+                <div className="bg-[#190C29] text-slate-200 font-mono text-[11px] p-2.5 rounded border border-violet-200/10 break-all pr-10">
                   {data.cryptographic_proof?.verification_hash}
                 </div>
                 <button
@@ -255,16 +255,16 @@ export default function VerifierGatewayPage({
               </div>
 
               {/* Assertion Metadata */}
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600 font-mono pt-1">
+              <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300 font-mono pt-1">
                 <div>
                   <span className="text-slate-400 block">Authorized Requester:</span>
-                  <span className="font-medium text-slate-800 truncate block">
+                  <span className="font-medium text-slate-200 truncate block">
                     {data.cryptographic_proof?.requester_org}
                   </span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">Token Expiry:</span>
-                  <span className="font-semibold text-blue-700 flex items-center">
+                  <span className="font-semibold text-violet-200 flex items-center">
                     <Clock className="w-3 h-3 mr-1" />
                     {secondsLeft > 0
                       ? formatCountdown(secondsLeft)
@@ -275,7 +275,7 @@ export default function VerifierGatewayPage({
             </div>
 
             {/* Zero-Knowledge Redaction Safety Notice */}
-            <div className="p-4 bg-slate-100/70 border-t border-[#E2E8F0] text-[11px] text-slate-500 flex items-start space-x-2">
+            <div className="p-4 bg-white/[0.06] border-t border-violet-200/10 text-[11px] text-slate-400 flex items-start space-x-2">
               <Lock className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
               <span>
                 <strong>Zero-Knowledge Redaction Guarantee:</strong> In strict
@@ -295,8 +295,7 @@ export default function VerifierGatewayPage({
           <div className="text-[11px]">
             Statutory Body Under Ministry of Education, Govt. of India
           </div>
-        </div>
-      </div>
-    </div>
-  );
+        </div>      </div>
+      </main></>);
 }
+

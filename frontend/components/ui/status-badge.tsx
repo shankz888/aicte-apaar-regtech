@@ -26,57 +26,60 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 }) => {
   const normalized = (status || "").toLowerCase().trim();
 
-  let colorClasses = "bg-slate-100 text-slate-700 border-slate-300";
-  let label = status.toUpperCase();
+  let colorClasses = "border-white/15 bg-white/[0.06] text-slate-200";
+  let dotClasses = "bg-slate-400";
+  let label = (status || "Unknown").replace(/[_-]+/g, " ").toUpperCase();
 
   switch (normalized) {
     case "accepted":
-      colorClasses = "bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]";
+      colorClasses = "border-emerald-300/25 bg-emerald-400/10 text-emerald-200";
+      dotClasses = "bg-emerald-300 shadow-[0_0_8px_rgba(110,231,183,0.7)]";
       label = "ACCEPTED";
       break;
     case "flagged":
     case "warning":
-      colorClasses = "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]";
+      colorClasses = "border-amber-200/25 bg-amber-300/10 text-amber-100";
+      dotClasses = "bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.65)]";
       label = normalized === "warning" ? "WARNING" : "FLAGGED";
       break;
     case "rejected":
     case "blocking":
     case "failed":
-      colorClasses = "bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]";
+      colorClasses = "border-rose-300/25 bg-rose-400/10 text-rose-200";
+      dotClasses = "bg-rose-300 shadow-[0_0_8px_rgba(253,164,175,0.65)]";
       label = normalized === "blocking" ? "BLOCKING" : normalized === "failed" ? "FAILED" : "REJECTED";
       break;
     case "validating":
-      colorClasses = "bg-blue-50 text-[#1D4ED8] border-blue-200 animate-pulse";
+      colorClasses = "border-sky-300/25 bg-sky-300/10 text-sky-200";
+      dotClasses = "bg-sky-300 shadow-[0_0_8px_rgba(125,211,252,0.7)] motion-safe:animate-pulse";
       label = "VALIDATING";
       break;
     case "completed":
-      colorClasses = "bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]";
+      colorClasses = "border-emerald-300/25 bg-emerald-400/10 text-emerald-200";
+      dotClasses = "bg-emerald-300 shadow-[0_0_8px_rgba(110,231,183,0.7)]";
       label = "COMPLETED";
       break;
+    case "info":
+      colorClasses = "border-violet-300/25 bg-violet-400/10 text-violet-200";
+      dotClasses = "bg-violet-300 shadow-[0_0_8px_rgba(196,181,253,0.65)]";
+      label = "INFO";
+      break;
     default:
-      colorClasses = "bg-slate-100 text-slate-700 border-slate-300";
       break;
   }
 
   const sizeClasses =
     size === "sm"
-      ? "text-[11px] px-2 py-0.5"
-      : "text-xs px-2.5 py-1";
+      ? "min-h-5 px-2 text-[10px]"
+      : "min-h-6 px-2.5 text-[11px]";
 
   return (
     <span
-      className={`inline-flex items-center font-mono font-semibold tracking-wide uppercase rounded border ${sizeClasses} ${colorClasses} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border font-mono font-semibold tracking-[0.08em] ${sizeClasses} ${colorClasses} ${className}`}
     >
       <span
-        className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-          normalized === "accepted" || normalized === "completed"
-            ? "bg-[#15803D]"
-            : normalized === "flagged" || normalized === "warning"
-            ? "bg-[#B45309]"
-            : normalized === "validating"
-            ? "bg-[#1D4ED8]"
-            : "bg-[#B91C1C]"
-        }`}
+        aria-hidden="true"
+        className={`h-1.5 w-1.5 shrink-0 rounded-full ${dotClasses}`}
       />
       {label}
     </span>

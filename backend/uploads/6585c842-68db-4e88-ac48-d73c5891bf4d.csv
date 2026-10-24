@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 apaar_id,full_name,gender,programme_code,academic_year,admission_category,start_date
 910000000996,Legitimate Applicant B,male,BTECH-CSE,2026-2027,general,2026-08-01
 910000000015,Conflicting Applicant 1,female,BTECH-CSE,2026-2027,general,2026-08-01
 910000000027,Conflicting Applicant 2,female,BTECH-CSE,2026-2027,general,2026-08-01
+=======
+apaar_id,full_name,gender,programme_code,academic_year,admission_category,start_date
+910000000996,Legitimate Applicant B,male,BTECH-CSE,2026-2027,general,2026-08-01
+910000000015,Conflicting Applicant 1,female,BTECH-CSE,2026-2027,general,2026-08-01
+910000000027,Conflicting Applicant 2,female,BTECH-CSE,2026-2027,general,2026-08-01
+>>>>>>> teammate/main

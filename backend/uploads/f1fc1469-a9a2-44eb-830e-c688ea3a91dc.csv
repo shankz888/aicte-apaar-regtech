@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 apaar_id,full_name,gender,programme_code,academic_year,admission_category,start_date,end_date
 800000000012,Aakash Mehta,male,BTECH-CSE,2026-2027,general,2026-08-01,
 800000000020,Pooja Hegde,female,BTECH-CSE,2026-2027,general,2026-08-01,
 999988887779,Rahul Verma,male,BTECH-CSE,2026-2027,general,2026-08-01,
 800000000049,Ananya Rao,female,BTECH-CSE,2026-2027,general,2026-08-01,
+=======
+apaar_id,full_name,gender,programme_code,academic_year,admission_category,start_date,end_date
+800000000012,Aakash Mehta,male,BTECH-CSE,2026-2027,general,2026-08-01,
+800000000020,Pooja Hegde,female,BTECH-CSE,2026-2027,general,2026-08-01,
+999988887779,Rahul Verma,male,BTECH-CSE,2026-2027,general,2026-08-01,
+800000000049,Ananya Rao,female,BTECH-CSE,2026-2027,general,2026-08-01,
+>>>>>>> teammate/main

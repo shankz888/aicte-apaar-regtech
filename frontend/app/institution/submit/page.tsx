@@ -266,26 +266,26 @@ export default function SubmissionWorkspacePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-transparent">
       <AppHeader />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 workspace-main workspace-main">
         {/* Page Title & Breadcrumb */}
         <div className="mb-6">
-          <div className="flex items-center space-x-2 text-xs font-mono uppercase text-slate-500 mb-1">
+          <div className="flex items-center space-x-2 text-xs font-mono uppercase text-slate-400 mb-1">
             <span>INSTITUTION PORTAL</span>
             <span>/</span>
-            <span className="text-slate-800 font-semibold">SUBMISSION WORKSPACE</span>
+            <span className="text-slate-200 font-semibold">SUBMISSION WORKSPACE</span>
           </div>
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold tracking-tight text-[#0F172A]">
+            <h1 className="text-2xl font-bold tracking-tight text-white">
               Student Admission Batch Ingestion
             </h1>
             <div className="flex flex-wrap items-center gap-2">
               <a
                 href="/template_v2026.csv"
                 download="template_v2026.csv"
-                className="inline-flex items-center text-xs font-medium text-[#1D4ED8] hover:text-[#1E40AF] bg-blue-50/80 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded transition-colors"
+                className="inline-flex items-center text-xs font-medium text-violet-200 hover:text-white bg-violet-400/10 hover:bg-violet-300/15 border border-violet-200/20 px-3 py-1.5 rounded transition-colors"
               >
                 <Download className="w-3.5 h-3.5 mr-1.5" />
                 Template (v2026.1)
@@ -293,38 +293,38 @@ export default function SubmissionWorkspacePage() {
               <a
                 href="/demo_data/synthetic_batch_overintake_135.csv"
                 download="synthetic_batch_overintake_135.csv"
-                className="inline-flex items-center text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3 py-1.5 rounded transition-colors"
+                className="inline-flex items-center text-xs font-medium text-slate-200 hover:text-slate-100 bg-white/[0.07] hover:bg-white/15 border border-violet-200/20 px-3 py-1.5 rounded transition-colors"
                 title="PRD Step 1: 135 rows for 120 cap"
               >
-                <Download className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
+                <Download className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
                 Demo 1: Overintake (135 rows)
               </a>
               <a
                 href="/demo_data/synthetic_batch_concurrent_transfer.csv"
                 download="synthetic_batch_concurrent_transfer.csv"
-                className="inline-flex items-center text-xs font-medium text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded transition-colors"
+                className="inline-flex items-center text-xs font-medium text-amber-100 hover:text-amber-50 bg-amber-300/10 hover:bg-amber-300/15 border border-amber-200/25 px-3 py-1.5 rounded transition-colors"
                 title="PRD Step 4: DUP-002 Cross-institutional clash"
               >
-                <Download className="w-3.5 h-3.5 mr-1.5 text-amber-600" />
+                <Download className="w-3.5 h-3.5 mr-1.5 text-amber-200" />
                 Demo 2: Concurrent Conflict
               </a>
               <a
                 href="/demo_data/synthetic_batch_mixed_statuses.csv"
                 download="synthetic_batch_mixed_statuses.csv"
-                className="inline-flex items-center text-xs font-medium text-emerald-800 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded transition-colors"
+                className="inline-flex items-center text-xs font-medium text-emerald-100 hover:text-emerald-50 bg-emerald-400/10 hover:bg-emerald-400/15 border border-emerald-200/25 px-3 py-1.5 rounded transition-colors"
                 title="Tri-status demo: 1 Accepted, 1 Warning (APR-001), 2 Rejections (APR-002, DUP-002)"
               >
-                <Download className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
+                <Download className="w-3.5 h-3.5 mr-1.5 text-emerald-200" />
                 Demo 3: Mixed (Pass + Warning + Reject)
               </a>
               <button
                 type="button"
                 onClick={handleResetBaseline}
                 disabled={isResettingBaseline}
-                className="inline-flex items-center text-xs font-medium text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-300 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
+                className="inline-flex items-center text-xs font-medium text-slate-200 hover:text-slate-100 bg-white/[0.045] hover:bg-white/[0.035] border border-violet-200/20 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
                 title="Reset demo baseline: 0/120 intake capacity, Rahul Verma at Inst B"
               >
-                <RefreshCw className={`w-3.5 h-3.5 mr-1.5 text-slate-500 ${isResettingBaseline ? "animate-spin" : ""}`} />
+                <RefreshCw className={`w-3.5 h-3.5 mr-1.5 text-slate-400 ${isResettingBaseline ? "animate-spin" : ""}`} />
                 {isResettingBaseline ? "Resetting..." : "Reset Demo Baseline"}
               </button>
             </div>
@@ -332,30 +332,30 @@ export default function SubmissionWorkspacePage() {
         </div>
 
         {/* 3-Stage Progress Header */}
-        <div className="bg-white border border-[#E2E8F0] rounded p-4 mb-6 shadow-sm">
+        <div className="glass-panel rounded p-4 mb-6 shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Stage 1 */}
             <div
               className={`flex items-center space-x-3 p-2 rounded ${
                 !selectedFile
-                  ? "bg-blue-50/70 border border-blue-200"
-                  : "bg-slate-50 border border-slate-200"
+                  ? "bg-violet-400/10 border border-violet-200/20"
+                  : "glass-control"
               }`}
             >
               <div
                 className={`w-7 h-7 rounded flex items-center justify-center font-mono text-xs font-bold ${
                   selectedFile
-                    ? "bg-[#15803D] text-white"
-                    : "bg-[#1D4ED8] text-white"
+                    ? "bg-emerald-500/80 text-white"
+                    : "bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white"
                 }`}
               >
-                {selectedFile ? "✓" : "1"}
+                {selectedFile ? "âœ“" : "1"}
               </div>
               <div>
-                <div className="text-xs font-semibold text-[#0F172A]">
+                <div className="text-xs font-semibold text-white">
                   Stage 1: Upload & Format Check
                 </div>
-                <div className="text-[11px] text-slate-500">
+                <div className="text-[11px] text-slate-400">
                   {selectedFile ? "Client pre-check passed" : "Select RFC-4180 CSV"}
                 </div>
               </div>
@@ -365,39 +365,39 @@ export default function SubmissionWorkspacePage() {
             <div
               className={`flex items-center space-x-3 p-2 rounded ${
                 isProcessing
-                  ? "bg-blue-50/70 border border-blue-200"
-                  : "bg-slate-50/60 border border-slate-200"
+                  ? "bg-violet-400/10 border border-violet-200/20"
+                  : "glass-control"
               }`}
             >
               <div
                 className={`w-7 h-7 rounded flex items-center justify-center font-mono text-xs font-bold ${
                   isProcessing
-                    ? "bg-[#1D4ED8] text-white animate-pulse"
-                    : "bg-slate-300 text-slate-700"
+                    ? "bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 text-white animate-pulse"
+                    : "bg-white/10 text-slate-400"
                 }`}
               >
                 2
               </div>
               <div>
-                <div className="text-xs font-semibold text-[#0F172A]">
+                <div className="text-xs font-semibold text-white">
                   Stage 2: Automated Validation
                 </div>
-                <div className="text-[11px] text-slate-500">
+                <div className="text-[11px] text-slate-400">
                   {isProcessing ? processingPhase : "Intake, APAAR & Duplicate rules"}
                 </div>
               </div>
             </div>
 
             {/* Stage 3 */}
-            <div className="flex items-center space-x-3 p-2 rounded bg-slate-50/60 border border-slate-200">
-              <div className="w-7 h-7 rounded flex items-center justify-center font-mono text-xs font-bold bg-slate-300 text-slate-700">
+            <div className="flex items-center space-x-3 p-2 rounded glass-control">
+              <div className="w-7 h-7 rounded flex items-center justify-center font-mono text-xs font-bold bg-white/10 text-slate-400">
                 3
               </div>
               <div>
-                <div className="text-xs font-semibold text-[#0F172A]">
+                <div className="text-xs font-semibold text-white">
                   Stage 3: Review & Remediation
                 </div>
-                <div className="text-[11px] text-slate-500">
+                <div className="text-[11px] text-slate-400">
                   Export annotated corrections
                 </div>
               </div>
@@ -407,19 +407,19 @@ export default function SubmissionWorkspacePage() {
 
         {/* Success / Status Callout */}
         {successNotice && (
-          <div className="mb-6 p-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded flex items-start justify-between">
+          <div className="mb-6 p-4 bg-emerald-400/10 border border-emerald-300/25 rounded flex items-start justify-between">
             <div className="flex items-start space-x-3">
-              <CheckCircle2 className="w-5 h-5 text-[#15803D] flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-200 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="text-xs font-bold text-[#15803D] uppercase tracking-wide">
+                <div className="text-xs font-bold text-emerald-200 uppercase tracking-wide">
                   Environment Ready
                 </div>
-                <div className="text-xs text-slate-700 mt-1">{successNotice}</div>
+                <div className="text-xs text-slate-200 mt-1">{successNotice}</div>
               </div>
             </div>
             <button
               onClick={() => setSuccessNotice(null)}
-              className="text-xs text-slate-400 hover:text-slate-600 font-mono"
+              className="text-xs text-slate-400 hover:text-slate-300 font-mono"
             >
               DISMISS
             </button>
@@ -428,19 +428,19 @@ export default function SubmissionWorkspacePage() {
 
         {/* Error Callout */}
         {errorNotice && (
-          <div className="mb-6 p-4 bg-[#FEF2F2] border border-[#FECACA] rounded flex items-start justify-between">
+          <div className="mb-6 p-4 bg-rose-400/10 border border-rose-300/25 rounded flex items-start justify-between">
             <div className="flex items-start space-x-3">
-              <XCircle className="w-5 h-5 text-[#B91C1C] flex-shrink-0 mt-0.5" />
+              <XCircle className="w-5 h-5 text-rose-200 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="text-xs font-bold text-[#B91C1C] uppercase tracking-wide">
+                <div className="text-xs font-bold text-rose-200 uppercase tracking-wide">
                   Validation Error Detected
                 </div>
-                <div className="text-xs text-slate-700 mt-1">{errorNotice}</div>
+                <div className="text-xs text-slate-200 mt-1">{errorNotice}</div>
               </div>
             </div>
             <button
               onClick={() => setErrorNotice(null)}
-              className="text-xs text-slate-400 hover:text-slate-600 font-mono"
+              className="text-xs text-slate-400 hover:text-slate-300 font-mono"
             >
               DISMISS
             </button>
@@ -456,8 +456,8 @@ export default function SubmissionWorkspacePage() {
             onClick={() => fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded p-12 text-center cursor-pointer transition-all ${
               isDragging
-                ? "border-[#1D4ED8] bg-blue-50/40"
-                : "border-[#E2E8F0] bg-white hover:border-slate-400 hover:bg-slate-50/50"
+                ? "border-violet-300/50 bg-violet-400/10"
+                : "border-violet-200/10 bg-white/[0.045] hover:border-slate-400 hover:bg-white/[0.02]"
             }`}
           >
             <input
@@ -467,49 +467,56 @@ export default function SubmissionWorkspacePage() {
               accept=".csv"
               className="hidden"
             />
-            <div className="w-12 h-12 mx-auto mb-4 bg-slate-100 rounded flex items-center justify-center text-slate-600">
-              <UploadCloud className="w-6 h-6 text-[#1D4ED8]" />
+            <div className="w-12 h-12 mx-auto mb-4 bg-white/[0.07] rounded flex items-center justify-center text-slate-300">
+              <UploadCloud className="w-6 h-6 text-violet-200" />
             </div>
-            <h3 className="text-sm font-semibold text-[#0F172A] mb-1">
+            <h3 className="text-sm font-semibold text-white mb-1">
               Select or drag and drop institutional enrolment CSV
             </h3>
-            <p className="text-xs text-slate-500 mb-4 max-w-md mx-auto">
+            <p className="text-xs text-slate-400 mb-4 max-w-md mx-auto">
               Accepts RFC-4180 CSV, max 10MB (approx. 15,000 rows). Columns must match template v2026.1 specification.
             </p>
-            <div className="inline-flex items-center text-xs font-semibold text-white bg-[#1D4ED8] hover:bg-[#1E40AF] px-4 py-2 rounded shadow-sm">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                fileInputRef.current?.click();
+              }}
+              className="inline-flex items-center text-xs font-semibold text-white bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 specular-button hover:from-violet-500 hover:via-purple-500 hover:to-fuchsia-500 px-4 py-2 rounded"
+            >
               <FileSpreadsheet className="w-4 h-4 mr-2" />
               Browse CSV File
-            </div>
+            </button>
           </div>
         ) : (
           <div className="space-y-6">
             {/* Selected File Summary Card */}
-            <div className="bg-white border border-[#E2E8F0] rounded p-4 flex items-center justify-between shadow-sm">
+            <div className="glass-panel rounded p-4 flex items-center justify-between shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 bg-blue-50 border border-blue-200 rounded">
-                  <FileSpreadsheet className="w-6 h-6 text-[#1D4ED8]" />
+                <div className="p-2.5 bg-violet-400/10 border border-violet-200/20 rounded">
+                  <FileSpreadsheet className="w-6 h-6 text-violet-200" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-[#0F172A]">
+                    <span className="text-sm font-bold text-white">
                       {selectedFile.name}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-mono text-slate-400 bg-white/[0.07] px-2 py-0.5 rounded">
                       {(selectedFile.size / 1024).toFixed(1)} KB
                     </span>
-                    <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-mono text-slate-400 bg-white/[0.07] px-2 py-0.5 rounded">
                       {totalParsedRows} Data Rows
                     </span>
                   </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
+                  <div className="text-xs text-slate-400 mt-0.5">
                     Schema status:{" "}
                     {missingHeaders.length === 0 ? (
-                      <span className="text-[#15803D] font-medium">
-                        ✓ All mandatory headers present
+                      <span className="text-emerald-200 font-medium">
+                        âœ“ All mandatory headers present
                       </span>
                     ) : (
-                      <span className="text-[#B91C1C] font-medium">
-                        ⚠ Missing {missingHeaders.length} mandatory header(s)
+                      <span className="text-rose-200 font-medium">
+                        âš  Missing {missingHeaders.length} mandatory header(s)
                       </span>
                     )}
                   </div>
@@ -521,7 +528,7 @@ export default function SubmissionWorkspacePage() {
                   type="button"
                   onClick={handleReset}
                   disabled={isProcessing}
-                  className="text-xs font-medium text-slate-600 hover:text-slate-800 border border-[#E2E8F0] hover:bg-slate-50 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
+                  className="text-xs font-medium text-slate-300 hover:text-slate-200 border border-violet-200/10 hover:bg-white/[0.035] px-3 py-1.5 rounded transition-colors disabled:opacity-50"
                 >
                   Choose Different File
                 </button>
@@ -530,7 +537,7 @@ export default function SubmissionWorkspacePage() {
                   type="button"
                   onClick={handleUploadSubmit}
                   disabled={isProcessing || missingHeaders.length > 0}
-                  className="inline-flex items-center text-xs font-bold text-white bg-[#1D4ED8] hover:bg-[#1E40AF] px-4 py-2 rounded shadow-sm disabled:opacity-50 transition-colors"
+                  className="inline-flex items-center text-xs font-bold text-white bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 specular-button hover:from-violet-500 hover:via-purple-500 hover:to-fuchsia-500 px-4 py-2 rounded shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)] disabled:opacity-50 transition-colors"
                 >
                   {isProcessing ? (
                     <>
@@ -549,19 +556,19 @@ export default function SubmissionWorkspacePage() {
 
             {/* Processing Progress Bar */}
             {isProcessing && (
-              <div className="bg-white border border-[#E2E8F0] rounded p-4 shadow-sm">
+              <div className="glass-panel rounded p-4 shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-semibold text-[#0F172A] flex items-center">
-                    <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin text-[#1D4ED8]" />
+                  <span className="text-xs font-semibold text-white flex items-center">
+                    <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin text-violet-200" />
                     {processingPhase}
                   </span>
-                  <span className="text-xs font-mono text-slate-600">
+                  <span className="text-xs font-mono text-slate-300">
                     {progressPercent}%
                   </span>
                 </div>
-                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
                   <div
-                    className="bg-[#1D4ED8] h-2 transition-all duration-300"
+                    className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 h-2 transition-all duration-300"
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
@@ -569,91 +576,91 @@ export default function SubmissionWorkspacePage() {
             )}
 
             {/* Client-Side Schema Pre-Check Preview Table */}
-            <div className="bg-white border border-[#E2E8F0] rounded overflow-hidden shadow-sm">
-              <div className="px-4 py-3 border-b border-[#E2E8F0] bg-slate-50 flex items-center justify-between">
+            <div className="glass-panel rounded overflow-hidden shadow-[0_12px_35px_-20px_rgba(0,0,0,0.85)]">
+              <div className="px-4 py-3 border-b border-violet-200/10 bg-white/[0.035] flex items-center justify-between">
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-white">
                     Schema Pre-Check Table (First 5 Rows Preview)
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-400 mt-0.5">
                     Pre-validated locally before initiating network ingestion to prevent redundant payloads.
                   </p>
                 </div>
-                <span className="text-xs font-mono text-slate-500">
-                  Showing 1–{preCheckRows.length} of {totalParsedRows} records
+                <span className="text-xs font-mono text-slate-400">
+                  Showing 1-{preCheckRows.length} of {totalParsedRows} records
                 </span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-[#E2E8F0] text-xs">
-                  <thead className="bg-slate-100/75">
+                <table className="min-w-full divide-y divide-violet-200/10 text-xs">
+                  <thead className="bg-white/[0.08]">
                     <tr>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Row #
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         APAAR ID
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Student Name
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Gender
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Programme
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Year
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Category
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Start Date
                       </th>
-                      <th className="px-3 py-2 text-left font-mono text-slate-600 uppercase text-[11px]">
+                      <th className="px-3 py-2 text-left font-mono text-slate-300 uppercase text-[11px]">
                         Pre-Check
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E2E8F0] bg-white">
+                  <tbody className="divide-y divide-violet-200/10 bg-white/[0.045]">
                     {preCheckRows.map((row) => (
-                      <tr key={row.index} className="hover:bg-slate-50/70">
-                        <td className="px-3 py-2 font-mono text-slate-500">
+                      <tr key={row.index} className="hover:bg-white/[0.04]">
+                        <td className="px-3 py-2 font-mono text-slate-400">
                           #{row.index}
                         </td>
-                        <td className="px-3 py-2 font-mono font-medium text-slate-800">
+                        <td className="px-3 py-2 font-mono font-medium text-slate-200">
                           {row.data["apaar_id"] || (
                             <span className="text-slate-400 italic">voluntary null</span>
                           )}
                         </td>
-                        <td className="px-3 py-2 font-medium text-slate-900">
+                        <td className="px-3 py-2 font-medium text-slate-100">
                           {row.data["full_name"]}
                         </td>
-                        <td className="px-3 py-2 capitalize text-slate-700">
+                        <td className="px-3 py-2 capitalize text-slate-200">
                           {row.data["gender"]}
                         </td>
-                        <td className="px-3 py-2 font-mono text-slate-700">
+                        <td className="px-3 py-2 font-mono text-slate-200">
                           {row.data["programme_code"]}
                         </td>
-                        <td className="px-3 py-2 font-mono text-slate-700">
+                        <td className="px-3 py-2 font-mono text-slate-200">
                           {row.data["academic_year"]}
                         </td>
-                        <td className="px-3 py-2 uppercase font-mono text-[11px] text-slate-700">
+                        <td className="px-3 py-2 uppercase font-mono text-[11px] text-slate-200">
                           {row.data["admission_category"]}
                         </td>
-                        <td className="px-3 py-2 font-mono text-slate-700">
+                        <td className="px-3 py-2 font-mono text-slate-200">
                           {row.data["start_date"]}
                         </td>
                         <td className="px-3 py-2">
                           {row.isValid ? (
-                            <span className="inline-flex items-center text-[11px] font-mono font-semibold text-[#15803D]">
+                            <span className="inline-flex items-center text-[11px] font-mono font-semibold text-emerald-200">
                               <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
                               READY
                             </span>
                           ) : (
-                            <span className="inline-flex items-center text-[11px] font-mono font-semibold text-[#B91C1C]">
+                            <span className="inline-flex items-center text-[11px] font-mono font-semibold text-rose-200">
                               <XCircle className="w-3.5 h-3.5 mr-1" />
                               FORMAT ISSUE
                             </span>
@@ -665,9 +672,9 @@ export default function SubmissionWorkspacePage() {
                 </table>
               </div>
 
-              <div className="p-3 bg-slate-50 border-t border-[#E2E8F0] flex items-center justify-between text-xs text-slate-500">
+              <div className="p-3 bg-white/[0.035] border-t border-violet-200/10 flex items-center justify-between text-xs text-slate-400">
                 <div className="flex items-center space-x-2">
-                  <Info className="w-4 h-4 text-blue-600" />
+                  <Info className="w-4 h-4 text-violet-300" />
                   <span>
                     Validation rules (CAP-001 intake quota, DUP-001/002 cross-tenant checks, Verhoeff checksum) will execute server-side on submission.
                   </span>
@@ -680,3 +687,9 @@ export default function SubmissionWorkspacePage() {
     </div>
   );
 }
+
+
+
+
+
+
