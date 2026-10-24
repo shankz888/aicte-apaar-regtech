@@ -374,3 +374,32 @@ def resolve_dispute(
         "resolution_notes": payload.notes,
         "message": f"Dispute successfully mediated with action '{payload.resolution_action}'.",
     }
+
+
+@router.post("/reset-baseline")
+def reset_baseline_endpoint(db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Resets Institution A admissions and batches back to statutory pristine demo baseline."""
+    inst_a = db.scalar(select(Institution).where(Institution.aicte_permanent_id == "SYN-MH-0001"))
+    if inst_a is not None:
+        # Delete batches and results for Inst A
+        batches = db.scalars(select(SubmissionBatch).where(SubmissionBatch.institution_id == inst_a.id)).all()
+        for b in batches:
+            db.query(ValidationResult).filter(ValidationResult.batch_id == b.id).delete()
+            db.delete(b)
+
+        # Delete admission records for Inst A
+        db.query(AdmissionRecord).filter(AdmissionRecord.institution_id == inst_a.id).delete()
+        db.flush()
+
+    # Clear dispute overrides
+    _DISPUTE_OVERRIDES.clear()
+
+    # Ensure baseline data (Rahul Verma at Inst B, chk_demo8723)
+    from app.services.seed_data import ensure_baseline_demo_data
+    ensure_baseline_demo_data(db)
+    db.commit()
+
+    return {
+        "status": "ok",
+        "message": "Statutory demonstration baseline restored: Institution A capacity is 0/120.",
+    }

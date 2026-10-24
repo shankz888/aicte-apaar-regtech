@@ -95,6 +95,27 @@ export default function SubmissionWorkspacePage() {
   const [processingPhase, setProcessingPhase] = useState<string>("");
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
+  const [successNotice, setSuccessNotice] = useState<string | null>(null);
+  const [isResettingBaseline, setIsResettingBaseline] = useState(false);
+
+  const handleResetBaseline = async () => {
+    try {
+      setIsResettingBaseline(true);
+      setErrorNotice(null);
+      const res = await fetch("/api/admin/reset-baseline", { method: "POST" });
+      if (res.ok) {
+        setSuccessNotice("Statutory baseline restored: Apex Institute intake capacity reset to 0/120.");
+        handleReset();
+        setTimeout(() => setSuccessNotice(null), 4000);
+      } else {
+        throw new Error("Reset endpoint returned error");
+      }
+    } catch {
+      setErrorNotice("Failed to reset baseline. Ensure backend server is running.");
+    } finally {
+      setIsResettingBaseline(false);
+    }
+  };
 
   const handleFileSelection = (file: File) => {
     if (!file.name.endsWith(".csv")) {
@@ -212,14 +233,24 @@ export default function SubmissionWorkspacePage() {
         body: formData,
       });
 
+      if (!res.ok) {
+        let errorMsg = `Server error (${res.status} ${res.statusText || "Internal Server Error"})`;
+        try {
+          const errData = await res.json();
+          errorMsg = errData.detail || errData.error || errorMsg;
+        } catch {
+          const text = await res.text();
+          if (text) {
+            errorMsg = text.length > 150 ? `${text.slice(0, 150)}...` : text;
+          }
+        }
+        throw new Error(errorMsg);
+      }
+
       setProcessingPhase("Finalizing audit logs and promoting valid enrolments...");
       setProgressPercent(90);
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || data.error || "Batch ingestion failed on server.");
-      }
 
       setProgressPercent(100);
 
@@ -286,6 +317,16 @@ export default function SubmissionWorkspacePage() {
                 <Download className="w-3.5 h-3.5 mr-1.5 text-emerald-600" />
                 Demo 3: Mixed (Pass + Warning + Reject)
               </a>
+              <button
+                type="button"
+                onClick={handleResetBaseline}
+                disabled={isResettingBaseline}
+                className="inline-flex items-center text-xs font-medium text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-300 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
+                title="Reset demo baseline: 0/120 intake capacity, Rahul Verma at Inst B"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 mr-1.5 text-slate-500 ${isResettingBaseline ? "animate-spin" : ""}`} />
+                {isResettingBaseline ? "Resetting..." : "Reset Demo Baseline"}
+              </button>
             </div>
           </div>
         </div>
@@ -363,6 +404,27 @@ export default function SubmissionWorkspacePage() {
             </div>
           </div>
         </div>
+
+        {/* Success / Status Callout */}
+        {successNotice && (
+          <div className="mb-6 p-4 bg-[#F0FDF4] border border-[#BBF7D0] rounded flex items-start justify-between">
+            <div className="flex items-start space-x-3">
+              <CheckCircle2 className="w-5 h-5 text-[#15803D] flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="text-xs font-bold text-[#15803D] uppercase tracking-wide">
+                  Environment Ready
+                </div>
+                <div className="text-xs text-slate-700 mt-1">{successNotice}</div>
+              </div>
+            </div>
+            <button
+              onClick={() => setSuccessNotice(null)}
+              className="text-xs text-slate-400 hover:text-slate-600 font-mono"
+            >
+              DISMISS
+            </button>
+          </div>
+        )}
 
         {/* Error Callout */}
         {errorNotice && (
